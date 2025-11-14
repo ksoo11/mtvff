@@ -120,6 +120,14 @@
             max-width: 1100px;
             margin: 0 auto;
         }
+        
+        /* New container for logo and hamburger icon */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%; /* Important for mobile positioning */
+        }
 
         #navbar .logo {
             font-size: 1.5rem;
@@ -133,32 +141,43 @@
             font-size: 1.3rem;
             margin-left: 8px;
         }
-
-        #navbar ul {
+        
+        /* DESKTOP STYLES for the navigation links */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .nav-links ul {
             display: flex;
             list-style: none;
         }
 
-        #navbar ul li {
+        .nav-links ul li {
             margin-left: 30px;
         }
 
-        #navbar ul li a {
+        .nav-links ul li a {
             text-decoration: none;
             color: var(--color-primary);
             font-weight: 500;
             transition: color 0.3s ease;
         }
 
-        #navbar ul li a:hover {
+        .nav-links ul li a:hover {
             color: var(--color-secondary);
         }
-        
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 30px;
+
+        /* Hamburger Icon - Hidden by Default on Desktop */
+        #menu-icon {
+            display: none; 
+            cursor: pointer;
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            z-index: 1001; /* Above other elements */
         }
+
 
         /* --- [ 3. Hero Section ] --- */
         #hero {
@@ -548,48 +567,84 @@
 
         /* Extra large smartphones and small tablets (Max 768px) */
         @media (max-width: 768px) {
+            /* ------------------------------------- */
+            /* NAV OVERRIDES FOR MOBILE MENU */
+            /* ------------------------------------- */
+            
+            /* Show the hamburger icon */
+            #menu-icon {
+                display: block;
+            }
+
+            /* Hide the desktop navigation links wrapper */
+            .nav-links {
+                position: absolute;
+                top: 70px; /* Position it right below the header */
+                left: 0;
+                width: 100%;
+                background: var(--color-white);
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                /* Initial state: Hidden off-screen */
+                display: none; 
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                border-top: 1px solid var(--color-light);
+                transition: max-height 0.3s ease-out;
+            }
+            
+            /* Class toggled by JavaScript to make the menu visible */
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links ul {
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                padding: 0;
+            }
+            
+            .nav-links ul li {
+                margin: 0;
+                padding: 10px 0;
+                width: 100%;
+                border-bottom: 1px solid var(--color-light);
+            }
+            
+            .nav-links ul li:last-child {
+                border-bottom: none;
+            }
+
+            .nav-links ul li a {
+                color: var(--color-primary);
+                font-weight: 600;
+            }
+            
+            .nav-links .btn {
+                margin-top: 15px;
+                width: 80%; /* Make the button wider */
+            }
+
             /* Global Scaling */
             section { padding: 60px 0; }
             .section-title { font-size: 2rem; }
             .section-subtitle { margin-bottom: 30px; }
-
-            /* Header & Navigation */
-            #navbar { flex-direction: column; }
-            #navbar .logo { 
-                margin-bottom: 15px; 
-                font-size: 1.3rem; /* Scale down logo */
-            }
-
-            .nav-right {
-                flex-direction: column;
-                align-items: center;
-                width: 100%;
-                gap: 15px;
-            }
-
-            #navbar ul { 
-                flex-direction: column; 
-                text-align: center; 
-                width: 100%;
-            }
-            #navbar ul li { 
-                margin: 8px 0; /* Reduced vertical spacing */
-            }
             
             /* Hero */
             #hero { height: auto; padding: 120px 0 50px 0; min-height: 450px; }
-            #hero-content h1 { font-size: 2.2rem; } /* Scaled down headline */
+            #hero-content h1 { font-size: 2.2rem; }
             #hero-content p { font-size: 1rem; }
-            .btn { padding: 10px 20px; } /* Smaller buttons */
+            .btn { padding: 10px 20px; }
             
             /* About/Why Us Sections */
             .about-content, .why-us-content { 
                 flex-direction: column; 
-                gap: 30px; /* Reduced gap */
+                gap: 30px;
             }
             .about-text h2, .why-us-text h2 { font-size: 1.8rem; }
             .about-image img, .why-us-image img { 
-                height: 300px; /* Reduced image height */
+                height: 300px;
             }
             
             /* Stats Bar */
@@ -602,23 +657,23 @@
             
             /* Services */
             .services-grid { 
-                grid-template-columns: 1fr; /* Single column layout */
+                grid-template-columns: 1fr;
                 gap: 20px;
             }
             
             /* Process */
             .process-grid { 
-                grid-template-columns: 1fr; /* Single column layout */
+                grid-template-columns: 1fr;
                 gap: 40px;
             }
             .process-grid::before { 
-                display: none; /* Hide the connecting line */
+                display: none;
             }
             
             /* Contact */
             #contact { padding: 60px 0; }
             .contact-grid { 
-                grid-template-columns: 1fr; /* Single column layout */
+                grid-template-columns: 1fr;
             }
 
             /* Footer */
@@ -669,10 +724,14 @@
 
     <header id="main-header">
         <nav id="navbar" class="container">
-            <a href="#hero" class="logo">MTV Freight Forwarding <i class="fa-solid fa-ship"></i></a>
             
-            <div class="nav-right">
-                <ul style="margin-right: -10px;">
+            <div class="nav-header">
+                <a href="#hero" class="logo">MTV Freight Forwarding <i class="fa-solid fa-ship"></i></a>
+                <i class="fa-solid fa-bars" id="menu-icon"></i>
+            </div>
+            
+            <div class="nav-links">
+                <ul>
                     <li><a href="#hero">Home</a></li>
                     <li><a href="#about">About Us</a></li>
                     <li><a href="#services">Services</a></li>
@@ -924,6 +983,34 @@
             duration: 800,  // Animation duration
             once: true,      // Only animate once
             offset: 50,      // Trigger animation 50px before element appears
+        });
+        
+        // --- MOBILE MENU TOGGLE LOGIC (NEW) ---
+        const menuIcon = document.getElementById('menu-icon');
+        const navLinks = document.querySelector('.nav-links');
+        const navLinksList = document.querySelectorAll('.nav-links a'); // Select all links (including the button)
+
+        // Function to close the menu
+        function closeMenu() {
+            navLinks.classList.remove('active');
+            menuIcon.classList.remove('fa-xmark');
+            menuIcon.classList.add('fa-bars');
+        }
+
+        // Toggle function when hamburger icon is clicked
+        menuIcon.addEventListener('click', () => {
+            if (navLinks.classList.contains('active')) {
+                closeMenu();
+            } else {
+                navLinks.classList.add('active');
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-xmark'); // Change icon to 'X'
+            }
+        });
+
+        // Close the menu when any link is clicked (to navigate to a section)
+        navLinksList.forEach(link => {
+            link.addEventListener('click', closeMenu);
         });
     </SCript>
 
